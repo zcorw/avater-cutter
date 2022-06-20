@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .wrap {
+      display: flex;
+    }
+    .tools {
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+</head>
+
+<body>
+  <div><img id="img" /></div>
+  <div class="wrap" id="cvsWrap">
+    <canvas id="cvs" style="border: #333 1px solid;" width="500" height="500"></canvas>
+    <div class="tools">
+      <button id="plus">+</button>
+      <button id="minus">-</button>
+    </div>
+  </div>
+  <input type="file" id="file" />
+  <script src="index.js"></script>
+  <script>
+    const file = document.getElementById("file");
+    file.addEventListener('change', uploadFile);
+    function uploadFile() {
+      const image = this.files[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(image);//转化成base64数据类型
+      reader.onload = function (e) {
+        const imgDom = document.getElementById("img");
+        imgDom.src = this.result;
+      }
+    }
+  </script>
+</body>
+
+</html>

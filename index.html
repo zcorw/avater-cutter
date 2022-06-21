@@ -10,9 +10,31 @@
     .wrap {
       display: flex;
     }
+    .cvs-wrap {
+      position: relative;
+      width: 500px;
+      height: 500px;
+      background-image: linear-gradient(45deg,rgba(0,0,0,.25) 25%,transparent 0,transparent 75%,rgba(0,0,0,.25) 0),linear-gradient(45deg,rgba(0,0,0,.25) 25%,transparent 0,transparent 75%,rgba(0,0,0,.25) 0);
+      background-color: #eee;
+      background-size: 30px 30px;
+      background-position: 0 0,15px 15px;
+      border: #333 1px solid;
+    }
     .tools {
       display: flex;
       flex-direction: column;
+    }
+    #cvs {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 98;
+    }
+    #maskBox {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 99;
     }
   </style>
 </head>
@@ -20,7 +42,10 @@
 <body>
   <div><img id="img" /></div>
   <div class="wrap" id="cvsWrap">
-    <canvas id="cvs" style="border: #333 1px solid;" width="500" height="500"></canvas>
+    <div id="wrap" class="cvs-wrap">
+      <canvas id="cvs" width="500" height="500"></canvas>
+      <canvas id="maskBox" width="500" height="500"></canvas>
+    </div>
     <div class="tools">
       <button id="plus">+</button>
       <button id="minus">-</button>

@@ -1,6 +1,13 @@
 const cvs = document.getElementById('cvs');
 const ctx = cvs.getContext('2d');
 const img = document.getElementById('img');
+const mask = document.getElementById('maskBox');
+const maskContext = mask.getContext('2d');
+maskContext.fillStyle = 'rgba(0,0,0,0.6)';
+maskContext.clearRect(0, 0, mask.width, mask.height);
+maskContext.fillRect(0, 0, mask.width, mask.height);
+maskContext.clearRect(mask.width / 2 - 82.5, mask.height / 2 - 25, 165, 50);
+
 /**
  * canvas 绘制图片并返回基本信息
  * orientation：图片方向，水平：“horizontal”，垂直：“vertical”
@@ -139,15 +146,16 @@ document.getElementById('turnRight').addEventListener('click', function () {
   imgData = turnImg(90);
   drawToCanvas(imgData);
 });
-cvs.addEventListener('wheel', function (e) {
+const box = document.getElementById('wrap');
+box.addEventListener('wheel', function (e) {
   e.preventDefault();
   const _e = e || window.event;
   const scale = _e.wheelDelta / 6000;
   _zoom(scale);
 });
-cvs.addEventListener('mousedown', dragImgOn);
-cvs.addEventListener('mouseup', dragImgOff);
-cvs.addEventListener('mousemove', function (e) {
+box.addEventListener('mousedown', dragImgOn);
+box.addEventListener('mouseup', dragImgOff);
+box.addEventListener('mousemove', function (e) {
   if (imgActive) {
     imgData = dragImg(e);
     drawToCanvas(imgData);

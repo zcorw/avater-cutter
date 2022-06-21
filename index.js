@@ -10,6 +10,7 @@ const img = document.getElementById('img');
  * width: 绘制到画布的宽度
  * height: 绘制到画布的高度
  * scale：图片缩放比
+ * degree: 旋转角度
  */
 function init() {
   const percentage = img.width / img.height;
@@ -38,12 +39,18 @@ function init() {
     width,
     height,
     scale,
+    degree: 0,
   }
 }
 // 绘制到画布
 function drawToCanvas(imgData) {
+  ctx.save();
   ctx.clearRect(0, 0, cvs.width, cvs.height);
+  ctx.translate(imgData.x + imgData.width / 2, imgData.y + imgData.height / 2);
+  ctx.rotate(imgData.degree * (Math.PI / 180));
+  ctx.translate(-(imgData.x + imgData.width / 2), -(imgData.y + imgData.height / 2));
   ctx.drawImage(img, imgData.x, imgData.y, imgData.width, imgData.height);
+  ctx.restore();
 }
 // 图片缩放并计算缩放后的基本信息
 function zoomImage(imgData, scale) {
@@ -87,6 +94,26 @@ function dragImg(e) {
     y: dragPoint.y + offset.y,
   }
 }
+// 旋转图片
+function turnImg(degree) {
+  const d = imgData.degree + degree;
+  if (d < 0) {
+    return {
+      ...imgData,
+      degree: 360 + d,
+    }
+  } else if (d >= 360) {
+    return {
+      ...imgData,
+      degree: d - 360,
+    }
+  } else {
+    return {
+      ...imgData,
+      degree: d,
+    }
+  }
+}
 
 let imgData;
 img.onload = function () {
@@ -104,16 +131,23 @@ document.getElementById('plus').addEventListener('click', function () {
 document.getElementById('minus').addEventListener('click', function () {
   _zoom(-0.02);
 });
+document.getElementById('turnLeft').addEventListener('click', function () {
+  imgData = turnImg(-90);
+  drawToCanvas(imgData);
+});
+document.getElementById('turnRight').addEventListener('click', function () {
+  imgData = turnImg(90);
+  drawToCanvas(imgData);
+});
 cvs.addEventListener('wheel', function (e) {
+  e.preventDefault();
   const _e = e || window.event;
   const scale = _e.wheelDelta / 6000;
   _zoom(scale);
-  e.preventDefault();
 });
 cvs.addEventListener('mousedown', dragImgOn);
 cvs.addEventListener('mouseup', dragImgOff);
 cvs.addEventListener('mousemove', function (e) {
-  console.log(e.pageX, e.pageY)
   if (imgActive) {
     imgData = dragImg(e);
     drawToCanvas(imgData);
